@@ -1,13 +1,13 @@
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
+// import reactLogo from './assets/react.svg';
+// import viteLogo from '/vite.svg';
+
 import './App.css';
+import Navbar from './components/Navbar';
 
 function App() {
   return (
     <>
-      <div className='container'>
-        <h1> HOLA</h1>
-      </div>
+      <Navbar />
     </>
   );
 }
