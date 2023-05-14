@@ -1,10 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { LOCAL_STORAGE_KEY } from 'env';
+import { setToken, clearToken } from '../../../../helpers/handleLocalStorage';
+import checkAuth from '../helpers/checkAuth';
 
-const initialState = {
-  isAuthenticated: false,
-  user: {},
-};
+const initialState = await checkAuth();
 
 const authSlice = createSlice({
   initialState,
@@ -12,15 +10,19 @@ const authSlice = createSlice({
   reducers: {
     login: (state, action) => {
       state.isAuthenticated = true;
-      state.user = action.payload;
-      window.localStorage.setItem(LOCAL_STORAGE_KEY, action.payload.token);
+      state.user = action.payload.data.data;
+      setToken(action.payload.data.token);
     },
-    logout: () => {
-      window.localStorage.clear();
-      return initialState;
+    logout: (state) => {
+      state.isAuthenticated = false;
+      clearToken();
+    },
+    loadUser: (state, action) => {
+      state.isAuthenticated = true;
+      state.user = action.payload.data;
     },
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, loadUser } = authSlice.actions;
 export default authSlice.reducer;
