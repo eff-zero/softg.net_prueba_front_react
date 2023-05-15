@@ -5,6 +5,7 @@ import useForm from '../../../../helpers/useForm';
 import Input from '../../../../components/Input';
 import { showToast } from '../../../../features/toast/toastSlice';
 import { useState } from 'react';
+import { toggleLoader } from '../../../../features/loader/loaderSlice';
 
 function LoginPage() {
   const dispatch = useDispatch();
@@ -13,6 +14,7 @@ function LoginPage() {
 
   const handleSubmit = async (e) => {
     try {
+      dispatch(toggleLoader());
       e.preventDefault();
       const response = await api().post('/login', form);
       const data = response?.data;
@@ -23,6 +25,8 @@ function LoginPage() {
       const message = data?.message;
       setErrors(validationErrors);
       message && dispatch(showToast({ message: data.message, color: '' }));
+    } finally {
+      dispatch(toggleLoader());
     }
   };
 
