@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { logout } from '../app/Modules/AuthModule/features/authSlice';
 import logoJS from '/logo-js.png';
 import authServices from '../app/Modules/AuthModule/services/services';
-import { logout } from '../app/Modules/AuthModule/features/authSlice';
 
 function Navbar() {
   const dispatch = useDispatch();

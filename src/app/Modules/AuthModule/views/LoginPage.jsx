@@ -3,10 +3,13 @@ import { login } from '../features/authSlice';
 import api from '../../../../api';
 import useForm from '../../../../helpers/useForm';
 import Input from '../../../../components/Input';
+import { showToast } from '../../../../features/toast/toastSlice';
+import { useState } from 'react';
 
 function LoginPage() {
   const dispatch = useDispatch();
   const { handleChange, form } = useForm();
+  const [errors, setErrors] = useState({});
 
   const handleSubmit = async (e) => {
     try {
@@ -15,13 +18,20 @@ function LoginPage() {
       const data = response?.data;
       data && dispatch(login(data));
     } catch (error) {
-      console.error(error);
+      const { data } = error.response;
+      const validationErrors = data?.error;
+      const message = data?.message;
+      setErrors(validationErrors);
+      message && dispatch(showToast({ message: data.message, color: '' }));
     }
   };
 
   return (
     <div className='d-flex justify-content-center align-items-center bg-primary vh-100'>
       <div className='card shadow w-50'>
+        <h3 className='card-header text-uppercase text-center py-3'>
+          Inicio de Sesión
+        </h3>
         <div className='card-body'>
           <form onSubmit={handleSubmit}>
             <Input
@@ -31,6 +41,7 @@ function LoginPage() {
               placeholder=' '
               name='email'
               onChange={handleChange}
+              error={errors}
             />
 
             <Input
@@ -40,6 +51,7 @@ function LoginPage() {
               placeholder=' '
               name='password'
               onChange={handleChange}
+              error={errors}
             />
 
             <button className='btn btn-dark d-block mx-auto'>
